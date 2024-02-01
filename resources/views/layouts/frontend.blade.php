@@ -39,9 +39,11 @@
     <script src="{{asset('frontend/libs/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script src="{{asset('frontend/libs/venobox/venobox.min.js') }}"></script>
     <script src="{{asset('frontend/libs/waypoints/jquery.waypoints.min.js') }}"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" ></script> 
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>  --}}
+
     <!-- orther script -->
     <script src="{{asset('frontend/js/main.js') }}"></script>
-    {{-- <script src="{{asset('custom/cart.js')}}"></script> --}}
 </head>
 
 <body>
@@ -183,7 +185,7 @@
                             </div><!-- .popup -->
                         </div><!-- .site__menu -->
                         <div class="site__brand">
-                            <a title="Logo" href="home-restaurant.html" class="site__brand__logo"><img src="{{ asset('frontend/images/assets/milano_logo.jpg') }}" alt="Golo"></a>
+                            <a title="Logo" href="home-restaurant.html" class="site__brand__logo"><img src="{{ asset('frontend/images/assets/logo.png') }}" alt="Golo"></a>
                         </div><!-- .site__brand -->
 
                     </div><!-- .site -->
@@ -192,28 +194,16 @@
                     <div class="right-header align-right">
                         <nav class="main-menu">
                             <ul>
-                                <li>
-                                    <a href="#" title="Home">Home</a>
-                                </li>
-                                <li>
-                                    <a href="#" title="Weman's">Weman's</a>
-            
-                                </li>
-                                <li>
-                                    <a title="Men's" href="#">Men's</a>
-                                   
-                                </li>
-                                <li>
-                                    <a title="Shop" href="#">Shop</a>
-                                   
-                                </li>
-                                <li>
-                                    <a title="Contact" href="#">Contact</a>
-                                   
-                                </li>
-                                @if (Auth::user()->hasRole('admin'))
-                                    
+                                @if (getCategories()->isNotEmpty())
+                                    @foreach (getCategories() as $category)
+                                    <li>
+                                        <a href="{{route('show.item',$category->id)}}" title="{{$category->name}}">{{$category->name}}</a>
+                
+                                    </li>
+                                    @endforeach                                    
+                                @endif
                                
+                                @if (auth()->user() && Auth::user()->hasRole('admin'))
                                 <li>
                                     <a title="AdminPanel" href="{{url('dashboard')}}">Admin Panel</a>
                                    
@@ -223,7 +213,7 @@
                         </nav>
                         <div class="right-header__login">
                             @guest
-                                <a title="Login" class="open-login" href="{{route('login')}}">Login</a>
+                                <a title="Login" href="{{route('login')}}">Login</a>
 
                             @else
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

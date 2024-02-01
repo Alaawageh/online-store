@@ -10,18 +10,32 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+   
 
     public function index()
     {
-        $categories =  Category::withCount('products')->get();
-        $products = Product::paginate('4');
+        $categories =  Category::where('status',true)->with('products')->withCount('products')->get();
+
+        $products = Product::with('category')->latest()->get();
         return view('frontend.home.index', [
                 'products' => $products,
                 'categories' => $categories
+        ]);
+    }
+
+    public function showCategory(Category $category)
+    {
+        $items = $category->products()->paginate('6');
+        return view('frontend.pages.category',[
+            'items' => $items
+        ]);
+    }
+    public function showProduct(Product $product)
+    {
+        $specifications = $product->Specifications()->get(); 
+        return view('frontend.pages.product',[
+            'product' => $product,
+            'specifications' => $specifications
         ]);
     }
 

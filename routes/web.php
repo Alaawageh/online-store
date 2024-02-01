@@ -27,9 +27,7 @@ use App\Http\Controllers\StripeController;
 |
 */
 
-Route::get('/', function () {
-    return view('frontend.home.index');
-});
+
 // Route::middleware('auth','permission')->group(function(){
     Route::resource('dashboard',DashboardController::class);
     Route::resource('category',CategoryController::class);
@@ -40,7 +38,6 @@ Route::get('/', function () {
     Route::resource('permissions', PermissionsController::class);
     Route::resource('users', UsersController::class);
     Route::resource('order',OrderController::class);
-
     Route::get('/change_status', [OrderController::class, 'change_status'])->name('order.change_status');
     Route::post('/save_status', [OrderController::class, 'save_status'])->name('order.save_status');
 
@@ -55,5 +52,9 @@ Route::post('/cart/store', [CartController::class, 'store'])->name('cart.store')
 Route::post('/cart/create_order', [CartController::class, 'create_order'])->name('cart.create_order');
 Route::get('/cart/payment', [CartController::class, 'payment'])->name('cart.payment');
 Route::get('/cart/order_process', [CartController::class, 'order_process'])->name('cart.order_process');
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('login',function(){
+    return view('auth.login');
+})->name('login');
+Route::get('show/category/{category}',[HomeController::class,'showCategory'])->name('show.item');
+Route::get('product/details/{product}',[HomeController::class,'showProduct'])->name('product.details');

@@ -61,6 +61,7 @@
                             <th>Ar Name</th>
                             <th>En Name</th>
                             <th>Price</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -74,6 +75,11 @@
                                     <td>{{$one->ar_name}}</td>
                                     <td>{{$one->en_name}}</td>
                                     <td>{{$one->price}}</td>
+                                    <td>
+                                        <button class="btn btn-primary toggle-availability" data-category-id="{{ $one->id }}" data-status="{{ $one->status ? 'true' : 'false' }}">
+                                            {{ $one->status ? 'On' : 'Off' }}
+                                        </button>
+                                    </td>
                                     <td>
                                         <div class="row">
                                         <a class="btn btn-primary" href="{{route('product.show', $one)}}">

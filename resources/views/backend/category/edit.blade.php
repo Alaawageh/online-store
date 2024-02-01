@@ -1,6 +1,6 @@
 @extends('layouts.app')
 <!-- END: Head-->
-@section('title', 'Create Category')
+@section('title', 'Update Category')
 
 @section('content')
 
@@ -10,7 +10,7 @@
         <div class="content-header-left col-md-9 col-12 mb-2">
             <div class="row breadcrumbs-top">
                 <div class="col-12">
-                    <h2 class="content-header-title float-left mb-0">Create Category</h2>
+                    <h2 class="content-header-title float-left mb-0">Update Category</h2>
                     <div class="breadcrumb-wrapper col-12">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="">Home</a>
@@ -35,14 +35,17 @@
                     <div class="card">
                         <div class="card-content">
                             <div class="card-body">
-                                <form class="form" method="post" action="{{route('category.store')}}" enctype="multipart/form-data">
+                                <form class="form" method="post" action="{{route('category.update',$category)}}" enctype="multipart/form-data">
                                     @csrf
+                                    @method('put')
                                     <div class="form-body">
                                         <div class="row">
+
                                             <div class="col-md-6 col-12">
                                                 <label>Name</label>
                                                 <div class="form-label-group">
-                                                    <input type="text" id="name-column" class="form-control" placeholder="Name" name="name" required>
+                                                    <input type="text" id="name-column" class="form-control" placeholder="Name" name="name" value="{{$category->name}}">
+                                                    <label for="name-column">Name</label>
                                                     <div class="danger">@error('name'){{$message}}@enderror</div>
                                                 </div>
                                             </div>
@@ -50,17 +53,23 @@
                                                 <label>status</label>
                                                 <div class="form-label-group">
                                                     <div class="custom-control custom-switch custom-control-inline">
-                                                        <input type="checkbox" class="custom-control-input" id="status" name="status" value="1">
-                                                        <label class="custom-control-label" for="status"></label>
+                                                        <input type="checkbox" class="custom-control-input" id="status" name="status" value="1" {{ $category->status ? 'checked' : '' }}>
+                                                        <label class="custom-control-label" for="status"></label>                                   
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-12 col-12">
                                                 <label>Image</label>
                                                 <div class="form-label-group">
-                                                    <input type="file" id="image-column" class="form-control" placeholder="Image" name="image">
+                                                    <input type="file" id="image-column" class="form-control" placeholder="Image" name="image" value="{{$category->image}}">
                                                     <label for="last-name-column">Image</label>
+                                                    
                                                     <div class="danger">@error('image'){{$message}}@enderror</div>
+                                                    <?php
+                                                    if($category->image){
+                                                        echo '<img class="img-lg" src="'.asset($category->image).'">';
+                                                    }
+                                                    ?>
                                                 </div>
                                             </div>
                                             <div class="col-12">

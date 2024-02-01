@@ -23,6 +23,8 @@ return new class extends Migration
             $table->integer('qty')->nullable();
             $table->string('image')->nullable();
             $table->foreignId('category_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->tinyInteger('rating')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

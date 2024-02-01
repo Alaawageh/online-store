@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','image'];
+    protected $fillable = ['name','image','status'];
     public function setImageAttribute ($image)
     {
         $newImageName = uniqid() . '_' . 'image' . '.' . $image->extension();

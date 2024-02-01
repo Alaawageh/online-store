@@ -97,6 +97,15 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-12">
+                                                <label>status</label>
+                                                <div class="form-label-group">
+                                                    <div class="custom-control custom-switch custom-control-inline">
+                                                        <input type="checkbox" class="custom-control-input" id="status" name="status" value="1" {{ $model->status ? 'checked' : '' }}>
+                                                        <label class="custom-control-label" for="status"></label>                                   
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 col-12">
                                                 <label>Image</label>
                                                 <div class="form-label-group">
                                                     <input type="file" id="image-column" class="form-control" placeholder="Image" name="image">

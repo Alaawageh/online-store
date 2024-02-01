@@ -45,15 +45,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
-        $request->validate([
-           'ar_name' => 'required',
-           'en_name' => 'required',
-           'image' => 'required',
+        $validateData = $request->validate([
+           'ar_name' => 'required|string|max:255',
+           'en_name' => 'required|string|max:255',
+           'image' => 'required|image|mimes:png,jpg,jpeg',
+           'ar_description' => 'nullable|string',
+           'en_description' => 'nullable|string',
+           'price' => 'required|numeric|min:0',
+           'qty' => 'numeric',
+           'status' => 'boolean|nullable',
+           'category_id' => 'exists:categories,id'
         ]);
-        $model = Product::create($request->only([
-            'ar_name','en_name','ar_description','en_description','price','qty','image','category_id'
-        ]));
+        $validateData['status'] = $request->status ?? false;
+        $model = Product::create($validateData);
 
         if(isset($request->key)){
             foreach ($request->key as $key => $one){
@@ -107,14 +111,19 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'ar_name' => 'required',
-            'en_name' => 'required',
-            'price' => 'required',
-        ]);
-        $product->update($request->only([
-            'ar_name','en_name','ar_description','en_description','price','qty','image','category_id'
-        ]));
+        $validateData = $request->validate([
+            'ar_name' => 'string|max:255',
+            'en_name' => 'string|max:255',
+            'image' => 'image|mimes:png,jpg,jpeg',
+            'ar_description' => 'nullable|string',
+            'en_description' => 'nullable|string',
+            'price' => 'numeric|min:0',
+            'qty' => 'numeric',
+            'status' => 'boolean|nullable',
+            'category_id' => 'exists:categories,id'
+         ]);
+         $validateData['status'] = $request->status ?? false;
+        $product->update($validateData);
         if(isset($request->key)){
             $old_specs_ids = []; //القيم القديمة يلي كاتت قبل التعديل 
             foreach ($product->Specifications as $one){

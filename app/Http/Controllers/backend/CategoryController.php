@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -34,7 +35,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $categories = Category::create($request->all());
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'status' => 'nullable|boolean',
+            'image' => 'required|image|mimes:png,jpg'
+        ]);
+    
+        $categories = Category::create([
+            'name' => $validatedData['name'],
+            'status' => $validatedData['status'] ?? false,
+            'image' => $validatedData['image']
+        ]);
 
         return redirect(route('category.index', $categories));
     }
@@ -58,7 +69,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('backend.category.edit',[
+            'category' => $category
+        ]);
     }
 
     /**
@@ -70,7 +83,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'string|max:255',
+            'status' => 'nullable|boolean',
+            'image' => 'image|mimes:png,jpg'
+        ]);
+        $validatedData['status'] = $validatedData['status'] ?? false;
+        $category->update($validatedData);
+        return redirect(route('category.index'));
     }
 
     /**
@@ -84,4 +104,6 @@ class CategoryController extends Controller
         $category->delete();
         return redirect(route('category.index'));
     }
+    
+
 }
