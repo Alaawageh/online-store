@@ -28,7 +28,7 @@ use App\Http\Controllers\StripeController;
 */
 
 
-// Route::middleware('auth','permission')->group(function(){
+Route::middleware('auth')->group(function(){
     Route::resource('dashboard',DashboardController::class);
     Route::resource('category',CategoryController::class);
     Route::resource('product',ProductController::class);
@@ -41,7 +41,7 @@ use App\Http\Controllers\StripeController;
     Route::get('/change_status', [OrderController::class, 'change_status'])->name('order.change_status');
     Route::post('/save_status', [OrderController::class, 'save_status'])->name('order.save_status');
 
-// });
+});
 
 Auth::routes();
 Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');

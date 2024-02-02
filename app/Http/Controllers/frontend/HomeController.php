@@ -32,10 +32,12 @@ class HomeController extends Controller
     }
     public function showProduct(Product $product)
     {
-        $specifications = $product->Specifications()->get(); 
+        $specifications = $product->Specifications()->get();
+        $products = Product::where('ctaegory_id',$product->category_id)->latest()->take('5')->get(); 
         return view('frontend.pages.product',[
             'product' => $product,
-            'specifications' => $specifications
+            'specifications' => $specifications,
+            'products' => $products
         ]);
     }
 

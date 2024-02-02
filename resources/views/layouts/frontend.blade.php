@@ -203,7 +203,7 @@
                                     @endforeach                                    
                                 @endif
                                
-                                @if (auth()->user() && Auth::user()->hasRole('admin'))
+                                @if (auth()->user() && Auth::user()->hasRole('Admin'))
                                 <li>
                                     <a title="AdminPanel" href="{{url('dashboard')}}">Admin Panel</a>
                                    
