@@ -2,41 +2,36 @@
 @section('title', 'Show Product')
 @section('content')
 <main id="main" class="site-main">
-    <div class="page-title page-title--small align-left" style="background-image: url({{asset("frontend/images/bg/banner-1.jpg")}});">
-        <div class="container">
-            <div class="page-title__content">
-                <h1 class="page-title__name">Shop</h1>
-                <p class="page-title__slogan"></p>
-            </div>
-        </div>	
-    </div><!-- .page-title -->
+
     <div class="shop-details">
         <div class="container">
             <ul class="shop-details__breadcrumbs breadcrumbs">
-                {{-- <li><a title="Shop" href="#">Shop</a></li>
-                <li><a title="France Travel Guide" href="#"></a></li> --}}
-            </ul><!-- .place__breadcrumbs -->
+            </ul>
             <div class="shop-details__wrap">
                 <div class="row">
                     <div class="col-md-5">
                         <div class="shop-details__thumb">
-                            <a title="France city guide" href="#"><img src="{{$product->image}}" alt="France"></a>
+                            <a href="#"><img style="width: 300px; height:300px" src="{{$product->image}}" alt="France"></a>
                         </div>
                     </div>
                     <div class="col-md-7">
                         <div class="shop-details__summary">
-                            <h2>{{$product->ar_name}}</h2>
+                            <h2>{{$product->name}}</h2>
                             
                             <div class="shop-details__review">
-                                @for($i = 1; $i <= 5; $i++)
-                                    @if($i <= $product->rating)
-                                        <span class="shop-details__review_star"><i class="fas fa-star"></i></span>
-                                    @else
-                                        <span class="shop-details__review_star"><i class="far fa-star"></i></span>
-                                    @endif
-                                @endfor
+                                <span class="rated">
+                                    @for($i = 5; $i >= 1; $i--)
+                                        @if ($i > $avgRate)
+                                        <label class="star-rating-empty" style="color: lightgray;" title="{{$i}} stars">{{$i}} stars</label>
+                                        @else
+                                        <label class="star-rating-complete" style="color: gold;" title="{{$i}} stars">{{$i}} stars</label>
+                                        @endif
+                                    @endfor		
+                                </span>
+                                
                             </div>
-                            <div class="shop-details__price" style="color: #5f4fff">{{$product->price}}</div>
+                            <div>({{$product->ratings()->count()}} reviews)</div>
+                            <div class="shop-details__price" style="color: #5f4fff;">$ {{$product->price}}</div>
                             <div class="shop-details__addcart">
                                 
                                 <button class="btn btn-sm btn-primary add_to_cart" type="button" data-id="<?= $product->id ?>">
@@ -64,27 +59,111 @@
             </div><!-- .shop-details__wrap -->
             <div class="shop-details__tabs">
                 <ul class="shop-details__tablist tabs">
-                    <li class="active"><a title="Description" href="#">Description</a></li>
-                    <li><a title="Rating" href="#">Rating</a></li>
+                    <li><a title="Description" href="#panel_description">Description</a></li>
+                    <li><a title="Review" href="#panel_review">Review</a></li>
                 </ul>
                 <div class="shop-details__panel" id="panel_description">
                    <p>
-                    {{$product->ar_description}}
-                    </p>
-                </b>
-                   
+                    {{$product->description}}
+                    </p>  
                 </div>
-                
                 <div class="shop-details__panel" id="panel_review">
-                    @for($i = 1; $i <= 5; $i++)
-                    @if($i <= $product->rating)
-                        <span class="shop-details__review_star"><i class="fas fa-star"></i></span>
+                    <div class="place__box place__box--reviews entry-comment">
+                        <h3 class="place__title--reviews">{{$comments->count()}} Comments</h3>
+                        <ul class="place__comments">
+                            @foreach ($comments as $comment)
+                            <li>
+                                <div class="place__author">
+                                    <div class="place__author__avatar">
+                                        <a title="{{$comment->user->name}}" href="#"><img style="width: 30px;height:30px" src="avatar-content" alt=""></a>
+                                    </div>
+                                    <div class="place__author__info">
+                                        <h4>
+                                            <a title="{{$comment->user->name}}" href="#">{{$comment->user->name}}</a>
+                                        </h4>
+                                        <span class="time">{{$comment->created_at->format('Y-M-d')}}</span>
+                                    </div>
+                                </div>
+                                <div class="place__comments__content">
+                                    <p>
+                                        {{$comment->comment}}
+                                    </p>
+                                </div>
+                            </li>  
+                            @endforeach
+                            
+                        </ul>
+                    </div><!-- .place__box -->
+
+                    @if(!empty($ratings))
+                    <div class="container">
+                        <div class="row">
+                            <div class="col mt-4">
+                                    <div class="form-group row">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <div class="col">
+                                        <div class="rated">
+                                        @for($i = 5; $i >= 1; $i--)
+                                        @if ($i > $ratings?->rate)
+                                        <label class="star-rating-empty" style="color: lightgray;" title="{{$i}} stars">{{$i}} stars</label>
+                                        @else
+                                        <label class="star-rating-complete" style="color: gold;" title="{{$i}} stars">{{$i}} stars</label>
+                                        @endif
+                                        @endfor
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="form-group row mt-4">
+                                    <div class="col">
+                                        <p>{{ $ratings?->comment }}</p>
+                                    </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
                     @else
-                        <span class="shop-details__review_star"><i class="far fa-star"></i></span>
-                    @endif
-                @endfor
+                    <div class="container">
+                        <div class="row">
+                            <div class="col mt-4">
+                                <form class="py-2 px-4" action="{{route('submit-rating')}}" style="box-shadow: 0 0 10px 0 #ddd;" method="POST" autocomplete="off">
+                                    @csrf
+                                    <p class="font-weight-bold ">Add Review</p>
+                                    <div class="form-group row">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="user_id" value="{{auth()->user()?->id}}">
+                                    <div class="col">
+                                        <div class="rate">
+                                            <input type="radio" id="star5" class="rate" name="rate" value="5"/>
+                                            <label for="star5" title="text">5 stars</label>
+                                            <input type="radio" id="star4" class="rate" name="rate" value="4"/>
+                                            <label for="star4" title="text">4 stars</label>
+                                            <input type="radio" id="star3" class="rate" name="rate" value="3"/>
+                                            <label for="star3" title="text">3 stars</label>
+                                            <input type="radio" id="star2" class="rate" name="rate" value="2">
+                                            <label for="star2" title="text">2 stars</label>
+                                            <input type="radio" id="star1" class="rate" name="rate" value="1"/>
+                                            <label for="star1" title="text">1 star</label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="form-group row mt-4">
+                                    <div class="col">
+                                        <textarea class="form-control" name="comment" rows="5 " placeholder="Comment" maxlength="200"></textarea>
+                                    </div>
+                                    </div>
+                                    <div class="mt-3 text-right">
+                                    <button class="btn btn-sm px-3 btn-primary">Submit
+                                    </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        </div>
+                        @endif
+                    </div>
+                    
                 </div>
-            </div><!-- .shop-details__tabs -->
+            </div>
         </div>
     </div><!-- .shop-details -->
     <div class="other-products">
@@ -96,11 +175,11 @@
                     <div class="col-lg-3 col-sm-6">
                         <div class="shop__products__item hover__box">
                             <div class="shop__products__thumb hover__box__thumb">
-                                <a title="Taiwan travel guide" href="#"><img src="{{$item->image}}" alt="Taiwan"></a>
+                                <a title="Taiwan travel guide" href="{{route('product.details',$item->id)}}"><img style="width: 300px; height:300px" src="{{$item->image}}" alt="Taiwan"></a>
                             </div>
                             <div class="shop__products__info">
-                                <h3><a title="Taiwan travel guide" href="#">{{$item->ar_name}}</a></h3>
-                                <span class="shop__products__price">{{$item->price}}</span>
+                                <h3><a title="Taiwan travel guide" href="{{route('product.details',$item->id)}}">{{$item->name}}</a></h3>
+                                <span class="shop__products__price">{{$item->price}} $</span>
                             </div>
                         </div>
                     </div>  
@@ -112,4 +191,26 @@
     </div><!-- .other-products -->
 </main><!-- .site-main -->
 <script src="{{asset('custom/cart.js')}}"></script>
+<script>
+    $(document).ready(function() {
+       
+        $('.shop-details__panel').hide();
+    
+       
+        $('#panel_description').show();
+        
+        $('.shop-details__tablist a').click(function(e) {
+            e.preventDefault(); 
+
+            $('.shop-details__panel').hide();
+    
+            
+            var targetPanel = $(this).attr('href');
+            $(targetPanel).show();
+            
+
+        });
+    });
+</script>
+    
 @endsection

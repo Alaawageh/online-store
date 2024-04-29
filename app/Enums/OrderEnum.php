@@ -14,7 +14,7 @@ class OrderEnum
 
     public static function Labels(){
         return [
-            self::new_order => '<span style="background: orange;">Pending</span>',
+            self::new_order => '<span class="badge bg-warning">Pending</span>',
             self::in_progress => 'Proccessing',
             self::delivered => 'Delivered',
         ];

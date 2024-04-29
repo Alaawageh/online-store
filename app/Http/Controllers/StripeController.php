@@ -32,8 +32,6 @@ class StripeController extends Controller
                 "source" => $request->stripeToken,
                 "description" => "Test payment from tutsmake.com."
         ]);
-   
-        // Session::flash('success', 'Payment successful!');
            
         return back();
     }

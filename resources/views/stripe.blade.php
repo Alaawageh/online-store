@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Laravel 8 - Stripe Payment Gateway Integration Tutorial Example - Tutsmake.com</title>
+<title></title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <style type="text/css">
-.panel-title {
-display: inline;
-font-weight: bold;
-}
-.display-table {
-display: table;
-}
-.display-tr {
-display: table-row;
-}
-.display-td {
-display: table-cell;
-vertical-align: middle;
-width: 61%;
-}
+    .panel-title {
+    display: inline;
+    font-weight: bold;
+    }
+    .display-table {
+    display: table;
+    }
+    .display-tr {
+    display: table-row;
+    }
+    .display-td {
+    display: table-cell;
+    vertical-align: middle;
+    width: 61%;
+    }
 </style>
 </head>
 <body>

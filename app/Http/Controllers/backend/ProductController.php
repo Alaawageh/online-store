@@ -6,148 +6,93 @@ use App\Models\Product;
 use App\Models\Specification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\storeRequest;
+use App\Http\Requests\Product\updateRequest;
+use App\Http\Requests\RatingRequest;
 use App\Models\Category;
+use App\Models\Rating;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $models = Product::paginate(3);
+        $products = Product::withoutGlobalScope('status')->paginate(10);
         return view('backend.product.index', [
-            'models' => $models
+            'products' => $products
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::withoutGlobalScope('status')->get();
         return view('backend.product.create',[
             'categories' => $categories
         ]);
-        //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(storeRequest $request)
     {
-        $validateData = $request->validate([
-           'ar_name' => 'required|string|max:255',
-           'en_name' => 'required|string|max:255',
-           'image' => 'required|image|mimes:png,jpg,jpeg',
-           'ar_description' => 'nullable|string',
-           'en_description' => 'nullable|string',
-           'price' => 'required|numeric|min:0',
-           'qty' => 'numeric',
-           'status' => 'boolean|nullable',
-           'category_id' => 'exists:categories,id'
-        ]);
-        $validateData['status'] = $request->status ?? false;
-        $model = Product::create($validateData);
-
-        if(isset($request->key)){
-            foreach ($request->key as $key => $one){
-                $specs = Specification::create([
-                    'product_id' => $model->id,
-                    'key' => $one,
-                    'value' => $request->value[$key],
-                ]);
+        DB::beginTransaction();
+        try{
+            $product = Product::create($request->safe()->all());
+            if(isset($request->key)){
+                foreach ($request->key as $key => $one){
+                    Specification::create([
+                        'product_id' => $product->id,
+                        'key' => $one,
+                        'value' => $request->value[$key],
+                    ]);
+                }
             }
-        }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
 
-        return redirect(route('product.show', $model));
+        }
+        return redirect(route('product.index',$product))->with(['success'=>'Created Successfully']);
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function show(Product $product)
     {
-        //
-        $model = Product::find($product->id);
+        $product = Product::find($product->id);
         return view('backend.product.show', [
-            'model' => $model,
+            'product' => $product,
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Product $product)
     {
-        $categories = Category::all();
+        $categories = Category::withoutGlobalScope('status')->get();
         return view('backend.product.edit', [
-            'model' => $product,
+            'product' => $product,
             'categories' => $categories
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Product $product)
+    public function update(updateRequest $request, Product $product)
     {
-        $validateData = $request->validate([
-            'ar_name' => 'string|max:255',
-            'en_name' => 'string|max:255',
-            'image' => 'image|mimes:png,jpg,jpeg',
-            'ar_description' => 'nullable|string',
-            'en_description' => 'nullable|string',
-            'price' => 'numeric|min:0',
-            'qty' => 'numeric',
-            'status' => 'boolean|nullable',
-            'category_id' => 'exists:categories,id'
-         ]);
-         $validateData['status'] = $request->status ?? false;
-        $product->update($validateData);
-        if(isset($request->key)){
-            $old_specs_ids = []; //القيم القديمة يلي كاتت قبل التعديل 
-            foreach ($product->Specifications as $one){
-                $old_specs_ids[] = $one->id;
-            }
-            $to_be_stored = [];// القيم يلي بدي ياها تضل معي 
+        $product->update($request->safe()->all());
+        if(isset($request->key)) {
+
+            $old_specs_ids = $product->Specifications->pluck('id')->toArray();
+            $to_be_stored = [];
 
             foreach ($request->id as $key => $oneId){
                 if(in_array($oneId, $old_specs_ids)){
                     $to_be_stored[] = $oneId;
                 }
-                $specs = Specification::find($oneId);
-                if(!$specs){
-                    $specs = Specification::create([
+                Specification::updateOrCreate(
+                    ['id' => $oneId],
+                    [
                         'product_id' => $product->id,
                         'key' => $request->key[$key],
                         'value' => $request->value[$key],
-                    ]);
-                }
-                else{
-                    Specification::find($oneId)->update([ 'key' => $request->key[$key],'value' =>$request->value[$key] ]);  
-                }
+                    ]
+                );
             }
-
             foreach ($old_specs_ids as $one) {
                 if(!in_array($one, $to_be_stored)){
                     $specs = Specification::find($one);
@@ -158,21 +103,13 @@ class ProductController extends Controller
             }
 
         }
-
-
-        return redirect(route('product.index', $product));
+        return redirect(route('product.index', $product))->with(['update'=>'Updated Successfully']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Product $product)
     {
         $product->delete();
-        return redirect(route('product.index'));
+        return redirect(route('product.index'))->with(['delete'=>'Deleted Successfully']);
     }
 
 
@@ -181,6 +118,16 @@ class ProductController extends Controller
         return view('backend.product._add_specs', [
             'id' => $_GET['id'],
         ]);
-        // return 'aaa';
+    }
+
+    public function submitRating(RatingRequest $request){
+        Rating::create($request->safe()->all());
+        return back()->with('success','Your review has been submitted Successfully,');
+    }
+    public function changeStatus(Product $product)
+    {
+        $product->update(['status' => !$product->status]);
+        return redirect(route('product.index'))->with(['update'=>'Updated Successfully']);
+
     }
 }

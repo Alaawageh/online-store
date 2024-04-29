@@ -10,7 +10,7 @@
 
     <!-- favicons -->
     <link rel="shortcut icon" href="images/favicon.ico">
-
+    <link rel="stylesheet" type="text/css" href="{{asset('app-assets/vendors/css/extensions/toastr.css') }}">
     <!-- Style CSS -->
     <link rel="stylesheet" type="text/css" href="{{asset('frontend/fonts/jost/stylesheet.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{asset('frontend/libs/line-awesome/css/line-awesome.min.css') }}" />
@@ -26,6 +26,8 @@
     <link rel="stylesheet" type="text/css" href="{{asset('frontend/libs/venobox/venobox.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{asset('frontend/css/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{asset('frontend/css/responsive.css') }}" />
+
+    <link rel="stylesheet" type="text/css" href="{{asset('frontend/css/rate.css')}}">
     <!-- jQuery -->
     <script src="{{asset('frontend/js/jquery-1.12.4.js') }}"></script>
     <script src="{{asset('frontend/libs/popper/popper.js') }}"></script>
@@ -39,11 +41,11 @@
     <script src="{{asset('frontend/libs/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script src="{{asset('frontend/libs/venobox/venobox.min.js') }}"></script>
     <script src="{{asset('frontend/libs/waypoints/jquery.waypoints.min.js') }}"></script>
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" ></script> 
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>  --}}
-
+    <script src="{{asset('app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
+    <script src="{{asset('app-assets/js/scripts/extensions/toastr.js') }}"></script>
     <!-- orther script -->
     <script src="{{asset('frontend/js/main.js') }}"></script>
+
 </head>
 
 <body>
@@ -71,117 +73,9 @@
                                             <a title="Login" href="#" class="open-login">{{ Auth::user()->name }}</a>
                                         @endguest
                                     </div><!-- .popup__user -->
-                                    <div class="popup__destinations popup__box">
-                                        <ul class="menu-arrow">
-                                            <li>
-                                                <a title="Destinations" href="#">Destinations </a>
-                                                <ul class="sub-menu">
-                                                    <li><a href="city-details-1.html" title="Tokyo">Tokyo</a></li>
-                                                    <li><a href="city-details-1.html" title="New York">New York</a></li>
-                                                    <li><a href="city-details-1.html" title="Barcelona">Barcelona</a></li>
-                                                    <li><a href="city-details-1.html" title="Amsterdam">Amsterdam</a></li>
-                                                    <li><a href="city-details-1.html" title="Los Angeles">Los Angeles</a></li>
-                                                    <li><a href="city-details-1.html" title="London">London</a></li>
-                                                    <li><a href="city-details-1.html" title="Bangkok">Bangkok</a></li>
-                                                    <li><a href="city-details-1.html" title="Paris">Paris</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="popup__menu popup__box">
-                                        <ul class="menu-arrow">
-                                            <li>
-                                                <a href="#" title="Demos">Demos</a>
-                                                <ul class="sub-menu">
-                                                    <li><a class="nav-link" href="{{ route('users.index') }}">Manage Users</a></li>
-                                                    <li><a href="home-business.html" title="Business Listing">Business Listing</a></li>
-                                                    <li><a href="home-countryguide.html" title="Country Travel Guide">Country Travel Guide</a></li>
-                                                    <li><a href="home-cityguide.html" title="City Travel Guide">City Travel Guide</a></li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <a href="#" title="Listings">Listings</a>
-                                                <ul class="sub-menu">
-                                                    <li>
-                                                        <a href="#" title="Search Layout">Search Layout</a>
-                                                        <ul class="sub-menu">
-                                                            <li><a href="ex-half-map-1.html" title="Half Map – Left Filter">Half Map – Left Filter</a></li>
-                                                            <li><a href="ex-half-map-2.html" title="Half Map – Top Filter">Half Map – Top Filter</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" title="City Layout">City Layout</a>
-                                                        <ul class="sub-menu">
-                                                            <li><a href="city-details-1.html" title="Half Map – Left Filter">Half Map – Left Filter</a></li>
-                                                            <li><a href="city-details-2.html" title="Half Map – Top Filter">Half Map – Top Filter</a></li>
-                                                            <li><a href="city-details-3.html" title="Without Map">Without Map</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" title="Listing Detail">Single Layout</a>
-                                                        <ul class="sub-menu">
-                                                            <li><a href="single-1.html" title="Carousel">Default - Carousel</a></li>
-                                                            <li><a href="single-2.html" title="Image">Default - Image</a></li>
-                                                            <li><a href="single-3.html" title="Restaurant">Restaurant Type</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" title="Booking Type">Booking Type</a>
-                                                        <ul class="sub-menu">
-                                                            <li><a href="bk-booking-form.html" title="Appointment Booking">Appointment Booking</a></li>
-                                                            <li><a href="bk-enquiry-form.html" title="Enquiry Form">Enquiry Form</a></li>
-                                                            <li><a href="bk-affiliate-link.html" title="Affiliate Link">Affiliate Link</a></li>
-                                                            <li><a href="bk-banner-ads.html" title="Affiliate Banner">Affiliate Banner</a></li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <a title="Page" href="#">Page</a>
-                                                <ul class="sub-menu">
-                                                    <li><a title="About" href="about-us.html">About Us</a></li>
-                                                    <li><a title="FAQ's" href="faqs.html">FAQ's</a></li>
-                                                    <li><a title="App Landing" href="app-landing.html">App Landing</a></li>
-                                                    <li><a title="Contacts" href="contact-us.html">Contacts</a></li>
-                                                    <li><a title="Add Listing" href="add-place.html">Add Listing</a></li>
-                                                    <li><a title="Pricing" href="">Pricing</a>
-                                                        <ul class="sub-menu">
-                                                            <li><a title="Pricing Plan" href="pricing-plan.html">Pricing Plan</a></li>
-                                                            <li><a title="Pricing Plan Checkout" href="pricing-checkout.html">Pricing Checkout</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <a title="Page" href="#">Shop</a>
-                                                        <ul class="sub-menu">
-                                                            <li><a title="Products" href="shop.html">Products</a></li>
-                                                            <li><a title="Product Detail" href="shop-detail.html">Product Detail</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <a title="Page" href="#">Blog</a>
-                                                        <ul class="sub-menu">
-                                                            <li><a title="Fullwidth" href="blog-fullwidth.html">Fullwidth</a></li>
-                                                            <li><a title="Right Sidebar" href="blog-right-sidebar.html">Right Sidebar</a></li>
-                                                            <li><a title="Blog Detail" href="blog-detail.html">Blog Detail</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a title="Owner Dashboard" href="owner-dashboard.html">Owner Dashboard</a></li>
-                                                    <li><a title="Owner Single" href="owner-page.html">Owner Single</a></li>
-                                                    <li><a title="Construction" href="construction.html">Construction</a></li>
-                                                    <li><a title="Coming Soon" href="coming-soon.html">Coming Soon </a></li>
-                                                    <li><a title="404" href="404.html">404 Page</a></li>
-                                                </ul>
-                                            </li>
-
-                                        </ul>
-                                    </div><!-- .popup__menu -->
+                                    
                                 </div><!-- .popup__content -->
-                                <div class="popup__button popup__box">
-                                    <a title="Add place" href="add-place.html" class="btn">
-                                        <i class="la la-plus"></i>
-                                        <span>Add place</span>
-                                    </a>
-                                </div><!-- .popup__button -->
+                                <!-- .popup__button -->
                             </div><!-- .popup -->
                         </div><!-- .site__menu -->
                         <div class="site__brand">
@@ -194,26 +88,36 @@
                     <div class="right-header align-right">
                         <nav class="main-menu">
                             <ul>
-                                @if (getCategories()->isNotEmpty())
-                                    @foreach (getCategories() as $category)
-                                    <li>
-                                        <a href="{{route('show.item',$category->id)}}" title="{{$category->name}}">{{$category->name}}</a>
-                
-                                    </li>
-                                    @endforeach                                    
+                                <li>
+                                    <a class="active" href="{{route('home')}}" title="home">Home</a>
+            
+                                </li>
+                                <li>
+                                    <a href="{{route('categories')}}" title="categories">Categories</a>
+            
+                                </li>
+                                <li>
+                                    <a href="{{route('products')}}" title="products">Products</a>
+            
+                                </li>
+                                @if (auth()->user())
+                                <li>
+                                    <a class="show-cart" title="cart" href="#">Cart</a>
+        
+                                </li>
                                 @endif
-                               
                                 @if (auth()->user() && Auth::user()->hasRole('Admin'))
                                 <li>
-                                    <a title="AdminPanel" href="{{url('dashboard')}}">Admin Panel</a>
+                                    <a title="AdminPanel" href="{{url('admin/dashboard')}}">Admin Panel</a>
                                    
                                 </li> 
                                 @endif
                             </ul>
                         </nav>
-                        <div class="right-header__login">
+                       
+                        <div  class="popup__user popup__box open-form">
                             @guest
-                                <a title="Login" href="{{route('login')}}">Login</a>
+                                <a title="Login" class="open-login" href="{{route('login')}}">Login</a>
 
                             @else
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -233,7 +137,7 @@
                                 </div>
                             @endguest
                         </div><!-- .right-header__login -->
-                        {{-- <div class="popup popup-form">
+                        <div class="popup popup-form">
                             <a title="Close" href="#" class="popup__close">
                                 <i class="las la-times la-24-black"></i>
                             </a><!-- .popup__close -->
@@ -241,48 +145,100 @@
                                 <li class="nav-signup"><a title="Sign Up" href="#signup">Sign Up</a></li>
                                 <li class="nav-login"><a title="Log In" href="#login">Log In</a></li>
                             </ul>
-                            <p class="choose-more">Continue with <a title="Facebook" class="fb" href="#">Facebook</a> or <a title="Google" class="gg" href="#">Google</a></p>
-                            <p class="choose-or"><span>Or</span></p>
                             <div class="popup-content">
-                                <form action="#" class="form-sign form-content" id="signup">
-                                    <div class="field-inline">
-                                        <div class="field-input">
-                                            <input type="text" placeholder="First Name" value="" name="first_name">
-                                        </div>
-                                        <div class="field-input">
-                                            <input type="text" placeholder="Last Name" value="" name="last_name">
-                                        </div>
+                                <form class="form-log form-content" method="POST" action="{{ route('login') }}" role="search" id="login">
+                                    @csrf
+                                    <div class="row">
+                                      <div class="col-lg-12">
+                                        <h4>Login</h4>
+                                      </div>
+                                      <div class="col-md-12">
+                                            <fieldset>
+                                              <input id="email" placeholder="email" type="email" class="form-control" name="email" required autocomplete="email" autofocus>
+                                                @if ($errors->has('email'))
+                                                    <div class="alert alert-danger">{{$errors->first('email')}}</div>
+                                                @endif                 
+                                            </fieldset>
+                                      </div>
+                        
+                                      <div class="col-md-12">
+                                        <fieldset>
+                                            <input id="password" placeholder="password" type="password" class="form-control" name="password" required autocomplete="current-password">
+                        
+                                            @if ($errors->has('password'))
+                                                <div class="alert alert-danger">{{$errors->first('password')}}</div>
+                                            @endif                
+                                        </fieldset>
+                                      </div>
+                                      
+                                      <div class="col-lg-12">                        
+                                          <fieldset>
+                                              <button type="submit" class="btn btn-primary">login</button>
+                                          </fieldset>
+                                      </div>
                                     </div>
-                                    <div class="field-input">
-                                        <input type="email" placeholder="Email" value="" name="email">
-                                    </div>
-                                    <div class="field-input">
-                                        <input type="password" placeholder="Password" value="" name="password">
-                                    </div>
-                                    <div class="field-check">
-                                        <label for="accept">
-                                            <input type="checkbox" id="accept" value="">
-                                            Accept the <a title="Terms" href="#">Terms</a> and <a title="Privacy Policy" href="#">Privacy Policy</a>
-                                            <span class="checkmark">
-                                                    <i class="la la-check"></i>
-                                                </span>
-                                        </label>
-                                    </div>
-                                    <input type="submit" name="submit" value="Sign Up">
                                 </form>
-                                <form action="#" class="form-log form-content" id="login">
-                                    <div class="field-input">
-                                        <input type="text" placeholder="Username or Email" value="" name="user">
+                                <form method="POST" action="{{ route('register') }}" class="form-sign form-content" id="signup">
+                                    @csrf
+            
+                                    <div class="form-group row">
+                                        {{-- <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label> --}}
+            
+                                        <div class="col-md-12">
+                                            <input id="name" placeholder="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+            
+                                            @error('name')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                    <div class="field-input">
-                                        <input type="password" placeholder="Password" value="" name="password">
+            
+                                    <div class="form-group row">
+                                        {{-- <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label> --}}
+            
+                                        <div class="col-md-12">
+                                            <input id="email" placeholder="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+            
+                                            @error('email')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                    <a title="Forgot password" class="forgot_pass" href="#">Forgot password</a>
-                                    <input type="submit" name="submit" value="Login">
+            
+                                    <div class="form-group row">
+                                        {{-- <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label> --}}
+            
+                                        <div class="col-md-12">
+                                            <input id="password" placeholder="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+            
+                                            @error('password')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+            
+                                    <div class="form-group row">
+                                        {{-- <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label> --}}
+            
+                                        <div class="col-md-12">
+                                            <input id="password-confirm" placeholder="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">                        
+                                        <fieldset>
+                                            <button type="submit" class="btn btn-primary" value="Login">Register</button>
+                                        </fieldset>
+                                    </div>
                                 </form>
                             </div>
                         </div>
-                        <!-- .popup-form --> --}}
+                        <!-- .popup-form -->
                         <div class="right-header__search">
                             <a title="Search" href="#" class="search-open">
                                 <i class="las la-search la-24-black"></i>
@@ -301,12 +257,6 @@
                                 </form><!-- .search__form -->
                             </div><!-- .site__search -->
                         </div>
-                        {{-- <div class="right-header__button btn"> --}}
-                            {{-- <a title="Add place" href="add-place.html">
-                                <i class="las la-plus la-24-white"></i>
-                                <span>Add Listing</span>
-                            </a> --}}
-                        {{-- </div><!-- .right-header__button --> --}}
                     </div><!-- .right-header -->
                 </div><!-- .col-md-6 -->
             </div><!-- .row -->
@@ -322,7 +272,14 @@
             <div class="footer__top">
                 <div class="row">
                     <div class="col-lg-5">
-                    
+                        <div class="footer__top__info">
+                            <a title="Logo" href="01_index_1.html" class="footer__top__info__logo"><img src="{{ asset('frontend/images/assets/logo.png') }}" alt="Golo"></a>
+                            <p class="footer__top__info__desc">Discover amazing things to do everywhere you go.</p>
+                            <div class="footer__top__info__app">
+                                <a title="App Store" href="#" class="banner-apps__download__iphone"><img src="{{ asset('frontend/images/assets/app-store.png') }}" alt="App Store"></a>
+                                <a title="Google Play" href="#" class="banner-apps__download__android"><img src="{{ asset('frontend/images/assets/google-play.png') }}" alt="Google Play"></a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-2">
                         <aside class="footer__top__nav">
@@ -353,22 +310,22 @@
                             <p>Phone: 1 (00) 832 2342</p>
                             <ul>
                                 <li class="facebook">
-                                    <a title="Facebook" href="#">
+                                    <a title="Facebook" href="#">								
                                         <i class="la la-facebook-f"></i>
                                     </a>
                                 </li>
                                 <li class="twitter">
-                                    <a title="Twitter" href="#">
+                                    <a title="Twitter" href="#">															
                                         <i class="la la-twitter"></i>
                                     </a>
                                 </li>
                                 <li class="youtube">
-                                    <a title="Youtube" href="#">
+                                    <a title="Youtube" href="#">								
                                         <i class="la la-youtube"></i>
                                     </a>
                                 </li>
                                 <li class="instagram">
-                                    <a title="Instagram" href="#">
+                                    <a title="Instagram" href="#">								
                                         <i class="la la-instagram"></i>
                                     </a>
                                 </li>
@@ -376,9 +333,9 @@
                         </aside>
                     </div>
                 </div>
-            </div><!-- .top-footer -->
+            </div>
             <div class="footer__bottom">
-                <p class="footer__bottom__copyright">2020 &copy; <a title="Uxper Team" href="#">uxper.co</a>. All rights reserved.</p>
+                <p class="footer__bottom__copyright">2023 &copy; <a title="Uxper Team" href="#">uxper.co</a>. made with love.</p>
             </div><!-- .top-footer -->
         </div><!-- .container -->
     </footer><!-- site-footer -->
@@ -395,7 +352,7 @@
     </div>
 
 </div><!-- #wrapper -->
-
+<script src="{{asset('custom/show-cart.js')}}"></script>
 <script>
     window.base_url = "<?= URL::to('/'); ?>";
 </script>

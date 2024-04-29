@@ -11,23 +11,17 @@ class PaymentOrder extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public $detials;
+    public function __construct($detials)
     {
-        //
+        $this->detials = $detials;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->subject('New Order')
+            ->view('frontend.emails.paymentSuccessEmail', [
+                'details' => $this->detials,
+            ]);
     }
 }

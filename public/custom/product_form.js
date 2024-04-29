@@ -8,7 +8,7 @@ $(document).on('click', '#add_product_details', function () {
         id = parseInt(id)+1;
     }
 
-    $.ajax({url: window.base_url+'/add_specs?id='+id, success: function(data){
+    $.ajax({url: window.base_url+'/admin/add_specs?id='+id, success: function(data){
             $('.product_specs').append(data);
         }});
 });

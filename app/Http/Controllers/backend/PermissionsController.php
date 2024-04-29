@@ -22,22 +22,11 @@ class PermissionsController extends Controller
         ]);
     }
 
-    /**
-     * Show form for creating permissions
-     * 
-     * @return \Illuminate\Http\Response
-     */
     public function create() 
     {   
         return view('backend.permissions.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {   
         $request->validate([
@@ -50,12 +39,6 @@ class PermissionsController extends Controller
             ->withSuccess(__('Permission created successfully.'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Permission  $post
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Permission $permission)
     {
         return view('backend.permissions.edit', [
@@ -63,13 +46,6 @@ class PermissionsController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Permission  $permission
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Permission $permission)
     {
         $request->validate([
@@ -82,12 +58,6 @@ class PermissionsController extends Controller
             ->withSuccess(__('Permission updated successfully.'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Permission $permission)
     {
         $permission->delete();

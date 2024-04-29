@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory , SoftDeletes;
     protected $table  = 'orders';
     protected $guarded = [];
-
+    protected $dates = ['deleted_at'];
     public function user(){
         return $this->belongsTo(User::class);
     }
@@ -23,6 +24,10 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::class,'orders_products')->withPivot('order_id','product_id','qty', 'price');
         
+    }
+    public function email()
+    {
+        return $this->hasOne(Email::class);
     }
     
     public function TotalPrice(){

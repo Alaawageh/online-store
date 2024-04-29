@@ -1,53 +1,46 @@
 @extends('layouts.frontend')
-@section('title', 'All Categories')
+@section('title', 'Category')
 @section('content')
-
-<main id="main" class="site-main">
-    <div class="page-title page-title--small page-title--blog align-left" style="background-image: url({{asset("frontend/images/bg/banner-1.jpg")}});">
-        <div class="container">
-            <div class="page-title__content">
-                <h1 class="page-title__name"></h1>
-                <p class="page-title__slogan"></p>
-            </div>
-        </div>	
-    </div><!-- .page-title -->
-    <div class="page-content isotope">
-        <div class="container">
-            <div class="isotope__nav">
-                <ul>
-                    <li><a title="All" href="#" class="active" data-filter="*">All Categories {{$items->count()}}</a></li>
-                </ul>
-            </div><!-- .isotope__nav -->
-            <div class="isotope__grid post-grid columns-3">
+<div class="shop">
+    <div class="container">
+        <div class="shop__meta">
+            <div class="shop__results">Showing all Products for this category results</div><!-- .shop__results -->
+            <div class="shop__order site__order">
+                
+                <div class="shop__sort site__sort">
+                    <div class="sorting">
+                        <label>Sort By</label>
+                        <select class="form-control" name="sort_by" onchange="window.location.href=this.value">
+                            <option value="{{ route('show.item', ['category' => $category->id, 'sort_by' => 'name', 'order' => 'asc']) }}" {{ $sortBy == 'name' && $order == 'asc' ? 'selected' : '' }}>Name (A-Z)</option>
+                            <option value="{{ route('show.item', ['category' => $category->id, 'sort_by' => 'name', 'order' => 'desc']) }}" {{ $sortBy == 'name' && $order == 'desc' ? 'selected' : '' }}>Name (Z-A)</option>
+                            <option value="{{ route('show.item', ['category' => $category->id, 'sort_by' => 'created_at', 'order' => 'asc']) }}" {{ $sortBy == 'created_at' && $order == 'asc' ? 'selected' : '' }}>Date Asc</option>
+                            <option value="{{ route('show.item', ['category' => $category->id, 'sort_by' => 'created_at', 'order' => 'desc']) }}" {{ $sortBy == 'created_at' && $order == 'desc' ? 'selected' : '' }}>Date Desc</option>
+                            <option value="{{ route('show.item', ['category' => $category->id, 'sort_by' => 'price', 'order' => 'asc']) }}" {{ $sortBy == 'price' && $order == 'asc' ? 'selected' : '' }}>Price (Low to High)</option>
+                            <option value="{{ route('show.item', ['category' => $category->id, 'sort_by' => 'price', 'order' => 'desc']) }}" {{ $sortBy == 'price' && $order == 'desc' ? 'selected' : '' }}>Price (High to Low)</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- .shop__sort -->
+            </div><!-- .shop__order -->
+        </div><!-- .shop__meta -->
+        <div class="related-post">
+            <h2>Related Products</h2>
+            <div class="related-grid columns-3">
                 @foreach ($items as $item)
-                <article class="hover__box isotope__grid__item post beaches">
+                <article class="hover__box post">
                     <div class="post__thumb hover__box__thumb">
-                        <a href="{{route('product.details',$item->id)}}">
-                            <img src="{{$item->image}}">
-                        </a>
+                        <a title="{{$item->name}}" href="{{route('product.details',$item->id)}}"><img src="{{$item->image}}" style="width: 300px; height:300px"  ></a>
                     </div>
                     <div class="post__info">
                         <ul class="post__category">
-                            <li><a title="{{$item->ar_name}}" href="{{route('product.details',$item->id)}}">{{$item->ar_name}}</a></li>
+                            <li><a title="Tips & Tricks" href="{{route('product.details',$item->id)}}">{{$item->name}}</a></li>
                         </ul>
-                        <h3 class="post__title" title="{{$item->ar_description}}"><a href="{{route('product.details',$item->id)}}">{{$item->ar_description}}</a></h3>
+                        <h3 class="post__title"><a title="{{$item->name}}" href="{{route('product.details',$item->id)}}">{{$item->price}} $</a></h3>
                     </div>
-                </article> 
-                @endforeach
-                
-                
-            </div><!-- .isotope__grid -->
-            <div class="pagination">
-                <div class="pagination__numbers">
-                    <span>1</span>
-                    <a title="2" href="#">2</a>
-                    <a title="Next" href="#">
-                        <i class="la la-angle-right"></i>
-                    </a>
-                </div>
-            </div><!-- .pagination -->
+                </article>
+                @endforeach 
+            </div>
         </div>
-    </div>
-</main><!-- .site-main -->
+        {{ $items->links('pagination::simple-default') }}	
 
 @endsection

@@ -49,23 +49,22 @@
                                             <div class="col-md-6 col-12">
                                                 <label>status</label>
                                                 <div class="form-label-group">
-                                                    <div class="custom-control custom-switch custom-control-inline">
-                                                        <input type="checkbox" class="custom-control-input" id="status" name="status" value="1">
-                                                        <label class="custom-control-label" for="status"></label>
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="customSwitch1" name="status" value="{{'on' ? 1 : 0}}">
+                                                        <label class="custom-control-label" for="customSwitch1"></label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-12 col-12">
                                                 <label>Image</label>
                                                 <div class="form-label-group">
-                                                    <input type="file" id="image-column" class="form-control" placeholder="Image" name="image">
+                                                    <input type="file" id="image-column" class="form-control" placeholder="Image" name="image" required>
                                                     <label for="last-name-column">Image</label>
                                                     <div class="danger">@error('image'){{$message}}@enderror</div>
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <button type="submit" class="btn btn-primary mr-1 mb-1">Submit</button>
-                                                <button type="reset" class="btn btn-outline-warning mr-1 mb-1">Reset</button>
                                             </div>
                                         </div>
                                     </div>

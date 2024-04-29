@@ -1,75 +1,83 @@
 @extends('layouts.frontend')
+@section('title','Checkout')
 @section('content')
 <div class=" cart">
     <form class="form" method="post" action="{{route('cart.create_order')}}" enctype="multipart/form-data">
         @csrf
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-8">
                 <h3 style="text-align: center">Personal Information</h3>
                 <div class="row">
                     <div class="col-md-6"> 
                         <label>First Name</label>
-                        <input class="form-control" name="first_name" value="{{Auth::user()->name}}">
+                        <input type="text" class="form-control" name="first_name" value="{{Auth::user()->name}}" required>
+                        <div class="danger">@error('first_name'){{$message}}@enderror</div>
                     </div>
                     <div class="col-md-6"> 
                         <label>Last Name</label>
-                        <input class="form-control" name="last_name" >
+                        <input type="text" class="form-control" name="last_name" required>
+                        <div class="danger">@error('last_name'){{$message}}@enderror</div>
                     </div>
                    
                     <div class="col-md-6"> 
                         <label>Email</label>
-                        <input class="form-control" name="email" value="{{Auth::user()->email}}">
+                        <input type="email" class="form-control" name="email" value="{{Auth::user()->email}}" readonly>
+                        <div class="danger">@error('email'){{$message}}@enderror</div>
                     </div>
                     <div class="col-md-6"> 
                         <label>phone</label>
-                        <input class="form-control" name="phone" >
+                        <input type="number" class="form-control" name="phone" required>
+                        <div class="danger">@error('phone'){{$message}}@enderror</div>
                     </div>
                     <div class="col-md-12">
                         <label>Address</label>
-                        <textarea class="form-control" name="address"></textarea> 
+                        <textarea class="form-control" name="address" required></textarea> 
+                        <div class="danger">@error('address'){{$message}}@enderror</div>
                     </div>
                 </div> 
-                <input id="lat" type="hidden" name="lat">
-                <input id="lng" type="hidden" name="lng">
-                  <div id="map" style="height: 300px"></div>
+                <input id="lat" type="hidden" name="lat" required>
+                <input id="lng" type="hidden" name="lng" required>
+                
+                <div id="map" style="height: 300px"></div>
+
             </div>
-            <div class="col-md-6">
-                <h3 style="text-align: center">Cart Content</h3>
-        
-        <?php foreach ($products as $key => $one){ ?>
-        <input style="display: none;" type="text" name="products[<?= $key ?>][id]" value="<?= $one['product']->id ?>">
-        <input style="display: none;" type="text" name="products[<?= $key ?>][qty]" value="<?= $one['qty'] ?>">
-        <div class="row border-top border-bottom">
-            <div class="row main align-items-center">
-                <div class="col"><img class="img-fluid" width="200px" src="{{asset($one['product']->image)}}"></div>
-                <div class="col">
-                    <div class="row text-muted"><?= $one['product']->en_name ?></div>
-                    <div class="row"><?= $one['product']->ar_name ?></div>
+            <div class="col-lg-4">
+               
+                <div class="package-review">
+                    <h2 style="text-align: center">Cart Content</h2>
+                    <label></label>
+                    <div class="pricing-item">
+                        <?php $total = 0; ?>
+                        @foreach ($products as $key => $one)
+                        <input style="display: none;" type="text" name="products[<?= $key ?>][id]" value="<?= $one['product']->id ?>">
+                        <input style="display: none;" type="text" name="products[<?= $key ?>][qty]" value="<?= $one['qty'] ?>">
+                        <div class="row main align-items-center">
+                            <div class="col">
+                                <?= $one['product']->name ?>
+                            </div>
+                            <div class="col">
+                                <?= $one['qty'] ?>
+                            </div>
+                            <div class="col">
+                                &euro; <?= $one['product']->price ?>
+                            </div>
+                            <div class="col">
+                                &euro; <?= $one['product']->price * $one['qty'] ?>
+                            </div>
+                        </div>
+                        <?php $total += $one['product']->price * $one['qty']; ?>
+                        @endforeach
+                        <div class="total">
+                            <h4>Total</h4>
+                            <span>&euro; <?= $total ?></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Pay</button>
+                    </div>
                 </div>
-                <div class="col">
-                    
-                    <div class="item_qty"><?= $one['qty'] ?></div>
-                    
-                </div>
-                <div class="col">
-                    &euro; <?= $one['product']->price ?>
-                    {{-- <span class="close cart_product_remove" data-cart_id="<?= $one->id ?>" data-id="cart_item_<?= $one->id ?>">&#10005;</span> --}}
-                </div>
-                <div class="col">
-                    &euro; <?= $one['product']->price * $one['qty'] ?>
-                    {{-- <span class="close cart_product_remove" data-cart_id="<?= $one->id ?>" data-id="cart_item_<?= $one->id ?>">&#10005;</span> --}}
-                </div>
+              
             </div>
-        </div>
-        <?php } ?>
-   
-        <button type="submit" class="btn btn-primary pull-right" style="float: right;">Pay</button>
-    </div>
         </div>
     </form>
-
-
-
 </div>
 
 <script async defer

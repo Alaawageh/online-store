@@ -9,7 +9,8 @@
             <div class=" cart">
                 <form class="form" method="post" action="{{route('order.save_status')}}" enctype="multipart/form-data">
                     @csrf
-                    <input style="display: none;" name="id" value="<?= $order->id ?>">
+                    @method('put')
+                    <input type="hidden" name="id" value="{{ $order->id }}">
                     <div class="row">
                         <div class="col-md-6 col-12">
                             <select name="status" class="form-control">

@@ -1,115 +1,104 @@
 @extends('layouts.app')
 @section('title', 'Products')
 @section('content')
-
-
-    <div class="content-header row">
-        <div class="content-header-left col-md-9 col-12 mb-2">
-            <div class="row breadcrumbs-top">
-                <div class="col-12">
-                    <h2 class="content-header-title float-left mb-0">Products</h2>
-                    <div class="breadcrumb-wrapper col-12">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Home</a>
-                            </li>
-                            <li class="breadcrumb-item active">Products
-                            </li>
-                        </ol>
-                    </div>
+<div class="content-header row">
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="content-header-title float-left mb-0">Products</h2>
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">Products
+                        </li>
+                    </ol>
                 </div>
             </div>
         </div>
     </div>
-    <div class="content-body">
-        <!-- Data list view starts -->
-        <section id="data-thumb-view" class="data-thumb-view-header">
-            <div class="action-btns d-none">
-                <div class="btn-dropdown mr-1 mb-1">
-
-                </div>
+</div>
+@include('backend.script')
+<div class="content-body">
+    <section id="data-thumb-view" class="data-thumb-view-header">
+        <div class="action-btns d-none">
+            <div class="btn-dropdown mr-1 mb-1">
             </div>
-            <!-- dataTable starts -->
-            <div class="table-responsive">
-                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                    <div class="top">
-                        <div class="actions action-btns">
-                            <div class="btn-group dropdown actions-dropodown">
-
-                            </div>
-                            <div class="dt-buttons btn-group">
-                                <a class="btn btn-outline-primary" href="{{route('product.create')}}">
-                                    <span><i class="feather icon-plus"></i> Add New</span></a>
-                            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                <div class="top">
+                    <div class="actions action-btns">
+                        <div class="dt-buttons btn-group">
+                            <a class="btn btn-outline-primary" href="{{route('product.create')}}">
+                                <span><i class="feather icon-plus"></i> Add New</span>
+                            </a>
                         </div>
-                        <div class="action-filters">
-                            <div class="dataTables_length" id="DataTables_Table_0_length"><label>
-                                    <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="custom-select custom-select-sm form-control form-control-sm">
-                                        <option value="4">4</option>
-                                        <option value="10">10</option>
-                                        <option value="15">15</option>
-                                        <option value="20">20</option>
-                                    </select>
-                                </label>
-                            </div>
-                            <div id="DataTables_Table_0_filter" class="dataTables_filter">
-                                <label><input type="search" class="form-control form-control-sm" placeholder="" aria-controls="DataTables_Table_0"></label>
-                            </div></div></div><div class="clear"></div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="card">
                     <table class="table data-thumb-view dataTable no-footer dt-checkboxes-select" id="DataTables_Table_0" role="grid">
                         <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Ar Name</th>
-                            <th>En Name</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th scope="col" width="1%" colspan="3">Action</th>    
+                            </tr>
                         </thead>
                         <tbody>
-
-                            <?php foreach ($models as $one){ ?>
+                            <?php $i=1; ?>
+                            <?php foreach ($products as $product){ ?>
                                 <tr>
+                                    <td>{{$i++}}</td>
                                     <td>
-                                        <img class="img-lg" src="{{ asset($one->image) }}">
+                                        <img class="img-lg" src="{{ asset($product->image) }}">
                                     </td>
-                                    <td>{{$one->ar_name}}</td>
-                                    <td>{{$one->en_name}}</td>
-                                    <td>{{$one->price}}</td>
+                                    <td>{{$product->name}}</td>
+                                    <td>{{$product->price}}</td>
                                     <td>
-                                        <button class="btn btn-primary toggle-availability" data-category-id="{{ $one->id }}" data-status="{{ $one->status ? 'true' : 'false' }}">
-                                            {{ $one->status ? 'On' : 'Off' }}
-                                        </button>
+                                        <form action="{{ route('product.changeStatus', $product->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="status-{{ $product->id }}" name="status"  {{ $product->status ? 'checked' : '' }} onchange="this.form.submit()">
+                                                <label class="custom-control-label" for="status-{{ $product->id }}"></label>
+                                            </div>
+                                        </form>
                                     </td>
                                     <td>
-                                        <div class="row">
-                                        <a class="btn btn-primary" href="{{route('product.show', $one)}}">
+                                        <a class="btn btn-sm btn-primary" href="{{route('product.show', $product)}}">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a class="btn btn-warning" href="{{route('product.edit', $one)}}">
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-warning" href="{{route('product.edit', $product)}}">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <form method="post" action="{{route('product.destroy', $one)}}">
+                                    </td>
+                                    <td>
+                                        <form method="post" action="{{route('product.destroy', $product)}}">
                                             @csrf
                                             @method('delete')
-                                            <button type="submit" value="{{$one->id}}" class="btn btn-danger">
+                                            <button type="submit" value="{{$product->id}}" class="btn btn-sm btn-danger">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </form>
-                                    </div>
                                     </td>
                                 </tr>
                             <?php } ?>
 
                         </tbody>
                     </table>
-                    {{$models->links()}}
+                </div>
+            </div>
+        </div>
+        {{$products->links()}}
 
-                       </div>
-            <!-- dataTable ends -->
-        </section>
-        <!-- Data list view end -->
-
-    </div>
-
-
+    </section>
+</div>
 @endsection

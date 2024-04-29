@@ -6,107 +6,92 @@ namespace App\Http\Controllers\frontend;
 
 use App\Enums\OrderEnum;
 use App\Enums\PaymentEnum;
+use App\Events\Create_Order;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOrderRequest;
+use App\Models\Email;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
-use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function add($id)
     {
-        $cart_item = Cart::where(['product_id' => $id], ['user_id' => Auth::user()->id])->first();
-       
+        $cart_item = auth()->user()->carts()->where('product_id',$id)->first();
         if($cart_item){
-            $cart_item->qty = $cart_item->qty+1;
-            $cart_item->save();
+            $this->increaseQuantity($cart_item);
         } else {
-            $cart_item = Cart::create([
-                'user_id' => Auth::user()->id,
-                'product_id' => $id,
-                'qty' => 1,
-            ]);
+            $this->createCartItem($id);
         }
-        
-        $all_cart_item = Cart::where(['user_id' => Auth::user()->id])->get();
-        
-         return view('frontend.cart.content', [
+        $all_cart_item = $this->getAllCartItems();
+        return view('frontend.cart.content', [
             'items' => $all_cart_item,
         ]);
     }
-
+    private function getAllCartItems()
+    {
+        return auth()->user()->carts()->get();
+    }
+    private function increaseQuantity($cartItem)
+    {
+        $cartItem->increment('qty');
+    }
+    private function createCartItem($productId)
+    {
+        auth()->user()->carts()->create([
+            'product_id' => $productId,
+            'qty' => 1,
+        ]);
+    }
     public function descrease_cart_item($id){
-        $cart_item = Cart::where(['id' => $id])->first();
-        if($cart_item){
-            $cart_item->qty = $cart_item->qty-1;
-            $cart_item->save();
+        $cart_item = auth()->user()->carts()->where('id',$id)->first();
+        if($cart_item) {
+            $cart_item->decrement('qty');
         }
-
-        // return response()->json(['status' => 'success']);
     }
 
     public function increase_cart_item($id){
-        $cart_item = Cart::where(['id' => $id])->first();
+        $cart_item = auth()->user()->carts()->where('id',$id)->first();
         if($cart_item){
-            $cart_item->qty = $cart_item->qty+1;
-            $cart_item->save();
+            $this->increaseQuantity($cart_item);
         }
-
-        // return response()->json(['status' => 'success']);
     }
 
     public function remove_cart_item($id){
-        $cart_item = Cart::where(['id' => $id])->first();
+        $cart_item = auth()->user()->carts()->where('id',$id)->first();
         if($cart_item){
             $cart_item->delete();
-           
         }
-
-        // return response()->json(['status' => 'success']);
     }
 
-    public function store(Request $request){
+    public function store(){
      
-    //   $products = [];
-    //   foreach($request['products'] as $key => $one){
-    //     $product = Product::where('id',$one['id'])->get();
-    //     foreach($product as $x){
-    //         $products[$key]['product'] = $x;
-    //         $products[$key]['qty'] = $one['qty'];
-    //     }
-       
-    //   }
-        $products = Cart::where('user_id',Auth::user()->id)->with('product')->get();
+        $products = auth()->user()->carts()->with('product')->get();
         return view('frontend.cart.checkout',[
             'products' => $products,
         ]);
     }
 
 
-    public function create_order(Request $request)
+    public function create_order(StoreOrderRequest $request)
     {
-        // dd($request);
-        $model = Order::create([
-            'user_id' => Auth::user()->id,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'lat' => $request->lat,
-            'lng' => $request->lng,
-            'status' => OrderEnum::new_order,
-            // 'payment_status' => PaymentEnum::not_paid,
-        ]);
+        auth()->user()->orders()->create($request->safe()->all());
+        // $order = Order::create([
+        //     'user_id' => Auth::user()->id,
+        //     'first_name' => $request->first_name,
+        //     'last_name' => $request->last_name,
+        //     'email' => $request->email,
+        //     'phone' => $request->phone,
+        //     'address' => $request->address,
+        //     'lat' => $request->lat,
+        //     'lng' => $request->lng,
+        //     'status' => OrderEnum::new_order,
+        // ]);
         if (isset($request->products)) {
             $productIds = array_column($request->products, 'id');
             $products = Product::findMany($productIds);
@@ -115,26 +100,28 @@ class CartController extends Controller
                 $product = $products->firstWhere('id', $one['id']);
                 if ($product) {
                     $specs = OrderProduct::create([
-                       'order_id' => $model->id,
+                       'order_id' => $order->id,
                        'product_id' => $one['id'],
                        'qty' => $one['qty'],
-                       'price' => $product->price,
+                       'price' => $product->price * $one['qty'],
                     ]);
                 }
             }
         }
-        $details = [
-            'title' => 'New Order in Qasioun Mall',
-            'body' => 'xxx'
-        ];
-        Mail::to('alaawajeh29@gmail.com')->send(new \App\Mail\NewOrder($details));
+        Email::create([
+            'order_id'=>$order->id,
+            'user_id' => Auth::user()->id,
+        ]);
+
+        event(new Create_Order($order));
+        
             
         $cart = Cart::where(['user_id' => Auth::user()->id])->get();
         foreach ($cart as $item) {
             $item->delete();
         }
     
-        return redirect(route('cart.payment', ['id' => $model->id]));
+        return redirect(route('cart.payment', ['id' => $order->id]));
     }
 
 public function payment(){
@@ -155,7 +142,12 @@ public function order_process(){
     }
     $order->payment_response = json_encode($_GET);
     $order->save();
-
+    // $details = [
+    //     'title' => 'New Order in Ashion ',
+    //     'body' => 'xxx'
+    // ];
+    // $user = $order->email;
+    // Mail::to($user)->send(new \App\Mail\PaymentOrder($details));
 
     return view('frontend.cart.payment_success', [
         'order' => $order,

@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\User\storeRequest;
+use App\Http\Requests\User\updateRequest;
+use Spatie\Permission\Models\Permission;
 
 class UsersController extends Controller
 {
@@ -44,28 +47,17 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(User $user, Request $request)
+    public function store(storeRequest $request)
     { 
-        $val = $request->validate([
-            'name' => 'string',
-            'email' => 'email|required',
-        ]);
-        $user->create(array_merge($val, [
-            'password' => bcrypt('test')
+        
+        $user = User::create(array_merge($request->only('name','email'), [
+            'password' => bcrypt($request->password)
         ]));
-        $user->syncRoles($request->get('role'));
-
+        $user->assignRole($request->input('role'));
         return redirect()->route('users.index')
             ->withSuccess(__('User created successfully.'));
     }
 
-    /**
-     * Show user data
-     *
-     * @param User $user
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function show(User $user)
     {
         return view('backend.users.show', [
@@ -73,13 +65,6 @@ class UsersController extends Controller
         ]);
     }
 
-    /**
-     * Edit user data
-     *
-     * @param User $user
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function edit(User $user)
     {
         return view('backend.users.edit', [
@@ -89,17 +74,9 @@ class UsersController extends Controller
         ]);
     }
 
-    /**
-     * Update user data
-     *
-     * @param User $user
-     * @param UpdateUserRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(User $user, Request $request)
+    public function update(updateRequest $request , User $user)
     {
-//        $user->update($request->validated());
+       $user->update($request->safe()->all());
 
         $user->syncRoles($request->get('role'));
 
@@ -107,13 +84,6 @@ class UsersController extends Controller
             ->withSuccess(__('User updated successfully.'));
     }
 
-    /**
-     * Delete user data
-     *
-     * @param User $user
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(User $user)
     {
         $user->delete();

@@ -41,21 +41,12 @@
                                     <div class="form-body">
                                         <div class="row">
 
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-12 col-12">
                                                 <label>Name</label>
                                                 <div class="form-label-group">
                                                     <input type="text" id="name-column" class="form-control" placeholder="Name" name="name" value="{{$category->name}}">
                                                     <label for="name-column">Name</label>
                                                     <div class="danger">@error('name'){{$message}}@enderror</div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-12">
-                                                <label>status</label>
-                                                <div class="form-label-group">
-                                                    <div class="custom-control custom-switch custom-control-inline">
-                                                        <input type="checkbox" class="custom-control-input" id="status" name="status" value="1" {{ $category->status ? 'checked' : '' }}>
-                                                        <label class="custom-control-label" for="status"></label>                                   
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-12 col-12">

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,15 +14,12 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ar_name',
-        'en_name',
-        'ar_description',
-        'en_description',
+        'name',
+        'description',
         'price',
         'qty',
         'image',
         'category_id',
-        'rating',
         'status'
     ];
 
@@ -47,5 +45,15 @@ class Product extends Model
     {
         return $this->belongsToMany(Order::class,'orders_products')->withPivot('order_id','product_id','qty', 'price');
         
+    }
+    public function ratings():HasMany
+    {
+        return $this->hasMany(Rating::class);
+    }
+    protected static function booted()
+    {
+        static::addGlobalScope('status', function (Builder $builder) {
+            $builder->where('status', true);
+        });
     }
 }

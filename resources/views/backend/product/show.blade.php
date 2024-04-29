@@ -8,14 +8,14 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-left mb-0">Profile</h2>
+                <h2 class="content-header-title float-left mb-0">Products</h2>
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">Home</a>
                         </li>
-                        <li class="breadcrumb-item"><a href="#">Pages</a>
+                        <li class="breadcrumb-item"><a href="#">Products</a>
                         </li>
-                        <li class="breadcrumb-item active">Profile
+                        <li class="breadcrumb-item active">Product Details
                         </li>
                     </ol>
                 </div>
@@ -40,15 +40,7 @@
                             <div class="cover-container">
                             </div>
                             <div class="profile-img-container d-flex align-items-center justify-content-between">
-                                <img src="{{asset($model->image)}}" class="rounded-circle img-sm img-border box-shadow-1" alt="Card image">
-                                <div class="float-right">
-                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-primary mr-1">
-                                        <i class="feather icon-edit-2"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-primary">
-                                        <i class="feather icon-settings"></i>
-                                    </button>
-                                </div>
+                                <img src="{{asset($product->image)}}" class="rounded-circle img-sm img-border box-shadow-1" alt="Card image">
                             </div>
                         </div>
                     </div>
@@ -64,25 +56,16 @@
                             </div>
                             <div class="card-body">
                                 <div class="mt-1">
-                                    <h6 class="mb-0">Arabic Name</h6>
-                                    <p><?= $model->ar_name ?></p>
+                                    <h6 class="mb-0">Name</h6>
+                                    <p>{{$product->name}}</p>
                                 </div>
                                 <div class="mt-1">
-                                    <h6 class="mb-0">English Name</h6>
-                                    <p>{{$model->en_name}}</p>
+                                    <h6 class="mb-0">Price</h6>
+                                    <p>{{$product->price}}</p>
                                 </div>
-                                {{-- <div class="mt-1">
-                                    <h6 class="mb-0">Email:</h6>
-                                    <p>bucketful@fiendhead.org</p>
-                                </div>
-                                <div class="mt-1">
-                                    <h6 class="mb-0">Website:</h6>
-                                    <p>www.pixinvent.com</p>
-                                </div> --}}
-                                <div class="mt-1">
-                                    <button type="button" class="btn btn-sm btn-icon btn-primary mr-25 p-25"><i class="feather icon-facebook"></i></button>
-                                    <button type="button" class="btn btn-sm btn-icon btn-primary mr-25 p-25"><i class="feather icon-twitter"></i></button>
-                                    <button type="button" class="btn btn-sm btn-icon btn-primary p-25"><i class="feather icon-instagram"></i></button>
+                                <div>
+                                    <h6>Description</h6>
+                                    <p>{{$product->description}}</p>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +80,7 @@
                             </div>
                             <div class="card-body">
                                 <table class="table">
-                                    <?php foreach ($model->Specifications as $one){ ?>
+                                    <?php foreach ($product->Specifications as $one){ ?>
                                         <tr>
                                             <th><?= $one->key ?></th>
                                             <td><?= $one->value ?></td>
@@ -116,4 +99,4 @@
         </div>
 
     </div>
-    @endsection
+@endsection

@@ -16,8 +16,7 @@
                         <div class="row main align-items-center">
                             <div class="col-2"><img class="img-fluid" width="250px" src="{{asset($one->product->image)}}"></div>
                             <div class="col">
-                                <div class="row text-muted"><?= $one->product->en_name ?></div>
-                                <div class="row"><?= $one->product->ar_name ?></div>
+                                <div class="row"><?= $one->product->name ?></div>
                             </div>
                             <div class="col">
                                 <a class="cart_product_minus" data-cart_id="<?= $one->id ?>" data-id="cart_item_<?= $one->id ?>" href="#">-</a>

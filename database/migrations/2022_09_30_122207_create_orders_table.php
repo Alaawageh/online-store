@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\OrderEnum;
 use App\Enums\PaymentEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -23,10 +24,11 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('payment_response')->nullable();
-            $table->integer('status');
+            $table->enum('status',[OrderEnum::new_order, OrderEnum::in_progress,OrderEnum::delivered])->default(OrderEnum::new_order);
             $table->enum('payment_status',[PaymentEnum::paid, PaymentEnum::not_paid])->default(PaymentEnum::not_paid);
             $table->float('lat')->nullable();
             $table->float('lng')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
