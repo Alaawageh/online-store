@@ -13,11 +13,11 @@ use App\Enums\OrderEnum;
                 </p>
                 <p>
                     <span>Number of products</span>
-                    <span>{{$order->products->count()}}</span>
+                    <span>{{$order->OrderProducts->count()}}</span>
                 </p>
                 <p class="total">
                     <span>Total</span>
-                    <span>$5.99</span>
+                    <span>{{$order->TotalPrice()}}</span>
                 </p>
             </div>
             <div class="align-center">

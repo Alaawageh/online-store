@@ -38,4 +38,9 @@ class Order extends Model
 
         return $total;
     }
+    public function CountProduct(){
+        foreach($this->orderProducts as $one){
+            return $one->count()*$one->qty;
+        }
+    }
 }

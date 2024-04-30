@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('/admin')->middleware('auth')->group(function(){
+Route::prefix('/admin')->middleware(['auth','role:Admin'])->group(function(){
     Route::resource('dashboard',DashboardController::class);
     Route::resource('category',CategoryController::class);
     Route::put('category/changeStatus/{category}',[CategoryController::class,'changeStatus'])->name('category.changeStatus');
@@ -47,6 +47,7 @@ Route::prefix('/admin')->middleware('auth')->group(function(){
 });
 
 Auth::routes();
+
 Route::get('categories',[HomeController::class,'getCategories'])->name('categories');
 Route::get('products',[HomeController::class,'getProducts'])->name('products');
 Route::get('show/category/{category}',[HomeController::class,'showCategory'])->name('show.item');
