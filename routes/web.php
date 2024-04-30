@@ -59,7 +59,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/cart/descrease_cart_item/{id}', [CartController::class, 'descrease_cart_item'])->name('cart.decrease');
     Route::get('/cart/increase_cart_item/{id}', [CartController::class, 'increase_cart_item'])->name('cart.increase');
     Route::get('/cart/remove_cart_item/{id}', [CartController::class, 'remove_cart_item']);
-    Route::get('/cart/store', [CartController::class, 'store'])->name('cart.store');
+    Route::post('/cart/store', [CartController::class, 'store'])->name('cart.store');
     Route::post('/cart/create_order', [CartController::class, 'create_order'])->name('cart.create_order');
     Route::get('/cart/payment', [CartController::class, 'payment'])->name('cart.payment');
     Route::get('/cart/order_process', [CartController::class, 'order_process'])->name('cart.order_process');

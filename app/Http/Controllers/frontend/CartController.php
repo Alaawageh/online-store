@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\frontend;
 
-// use App\Enums\OrderEnum;
-
 use App\Enums\OrderEnum;
 use App\Enums\PaymentEnum;
 use App\Events\Create_Order;
@@ -69,7 +67,7 @@ class CartController extends Controller
         }
     }
 
-    public function store(){
+    public function store(Request $request){
      
         $products = auth()->user()->carts()->with('product')->get();
         return view('frontend.cart.checkout',[
@@ -80,7 +78,7 @@ class CartController extends Controller
 
     public function create_order(StoreOrderRequest $request)
     {
-        auth()->user()->orders()->create($request->safe()->all());
+        $order = auth()->user()->orders()->create($request->safe()->all());
         // $order = Order::create([
         //     'user_id' => Auth::user()->id,
         //     'first_name' => $request->first_name,
