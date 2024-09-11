@@ -16,7 +16,7 @@
                             @foreach ($categories as $category)
                             <div class="field-check">
                                 <li><a href="{{ route('products.category', $category->id) }}">{{ $category->name }}</a></li>
-                            </div> 
+                            </div>
                             @endforeach
                         </div>
                         <a href="#" class="more open-more" data-close="Close" data-more="More">More</a>
@@ -25,7 +25,7 @@
                 <div class="filter-box">
                     <h3>Sort By</h3>
                     <div class="filter-list">
-                
+
                         <div class="field-check">
                             <a class="px-4" href="{{ url()->current() }}?sort_by=created_at&order=desc" {{ $sortBy == 'created_at' && $order == 'desc' ? 'selected' : '' }}>Date Desc</a>
                         </div>
@@ -44,14 +44,14 @@
                         <div class="field-check">
                             <a class="px-4" href="{{ url()->current() }}?sort_by=name&order=asc" {{ $sortBy == 'name' && $order == 'asc' ? 'selected' : '' }}>Name (A-Z)</a></li>
                         </div>
-                        
-                    </div> 
+
+                    </div>
                 </div>
             </form>
-            
+
         </div><!-- .archive-fillter -->
         <div class="main-primary">
-            
+
             <div class="top-area top-area-filter">
                 <div class="filter-left">
                     <span class="result-count"><span class="count">{{$products->count()}}</span> products</span>
@@ -90,19 +90,19 @@
                             <a href="{{route('product.details',$product->id)}}" class="golo-add-to-wishlist btn-add-to-wishlist " data-place-id="185">
                                 <span class="icon-heart">
                                     <i class="la la-bookmark large"></i>
-                                </span>                                    
-                            </a>       
+                                </span>
+                            </a>
                             <a class="entry-category purple add_to_cart" data-id="<?= $product->id ?>" href="#">
 								<i class="las la-shopping-cart"></i><span>Order Now</span>
 							</a>
-                        </div>       
+                        </div>
                         <div class="entry-detail">
                             <div class="entry-head">
                                 <div class="place-type list-item">
                                     <span>Category</span>
                                    </div>
                                 <div class="place-city">
-                                    <a href="#">{{$product->category->name}}</a>
+                                    <a href="#">{{$product->category?->name}}</a>
                                 </div>
                             </div>
                             <h3 class="place-title"><a href="{{route('product.details',$product->id)}}">{{$product->name}}</a></h3>
@@ -116,7 +116,7 @@
                                                 @else
                                                 <label class="star-rating-complete" style="color: gold;" title="{{$i}} stars">{{$i}} stars</label>
                                                 @endif
-                                            @endfor		
+                                            @endfor
                                         </span>
                                     </div>
                                 </div>
@@ -128,7 +128,7 @@
                     </div>
                 </div>
                 @endforeach
-            
+
             </div>
         </div>
     </div>
